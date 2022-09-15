@@ -1,6 +1,6 @@
 <?php
-include("footer/db.php");
-require("functions.php");
+include("Footer/db.php");
+require ("functions/functions.php");
 
 ?>
 
@@ -22,7 +22,7 @@ require("functions.php");
         <div class="container"><!--container start-->
             <div class="col-md-6 offer">
                 <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
-                <a href="#">Shopping Cart Total Price: Rs 100, Total Items 2</a> 
+                <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
                 <ul class="menu">

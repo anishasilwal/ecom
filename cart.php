@@ -1,3 +1,7 @@
+<?php
+include("Footer/db.php");
+require ("functions/functions.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +20,7 @@
         <div class="container"><!--container start-->
             <div class="col-md-6 offer">
                 <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
-                <a href="#">Shopping Cart Total Price: Rs 100, Total Items  <?php item(); ?></a> 
+                <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items  <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
                 <ul class="menu">
@@ -125,6 +129,12 @@
                 <form action="cart.php" method="post" enctype="multipart-form-data">
              
     <h1>Shopping Cart</h1>
+    <?php
+    $ip_add=getUserIP();
+    $select_cart="select * from cart where ip_add='$ip_add'";
+    $run_cart=mysqli_query($con,$select_cart);
+    $count=mysqli_num_rows($run_cart);
+    ?>
     <p class="text-muted">Currently you have 2 items in your cart.</p>
     <div class="table-responsive">
         <table class="table">
@@ -139,39 +149,63 @@
 </tr>
 </thead>
 <tbody>
+
+<?php
+$total=0;
+    while($row=mysqli_fetch_array($run_cart)){
+        $pro_id = $row['p_id'];
+        $pro_farm = $row['farm'];
+        $pro_qty = $row['qty'];
+        $get_product = "select * from products where product_id ='$pro_id'";
+        $run_pro = mysqli_query($con , $get_product);
+        while($row = mysqli_fetch_array($run_pro)){
+            $p_title = $row['product_title'];
+            $p_img1 = $row['product_img1'];
+            $p_price = $row['product_price'];
+            $sub_total = $row['product_price'] * $pro_qty;
+            $total += $sub_total ;  
+
+        }
+
+
+        ?>
     <tr>
 
-    <td> <img src="images/cauliflower.jpg"></td>
-        <td>Cauliflower</td>
-        <td>2</td>
-        <td>Rs.80</td>
-        <td>ABC</td>
-        <td><input type="checkbox" name="remove[]"></td>
-        <td>Rs.160</td>
+    <td> <img src="admin_area/product_image/<?php echo $p_img1 ?>"></td>
+        <td><?php echo $p_title ?></td>
+        <td><?php echo $pro_qty ?></td>
+        <td><?php echo $p_price ?></td>
+        <td><?php echo $pro_farm ?></td>
+        <td><input type="checkbox" name="remove[]" value="<?php echo $pro_id ?>"></td>
+        <td>Rs.<?php echo $sub_total ?></td>
     </tr>
 
-    <tr>
-    <td> <img src="images/pumpkin.jpg"></td>
-        <td>Pumpkin</td>
-        <td>1</td>
-        <td>Rs.50</td>
-        <td>ABC</td>
-        <td><input type="checkbox" name="remove[]"></td>
-        <td>Rs.50</td>
-    </tr>
+    <?php } ?>
+  
 
 </tbody>
 
-<tfoot>
+<!-- <tfoot>
     <tr>
         <th colspan="5">Total</th>
-        <th colspan="2">Rs.210</th>
+        <th colspan="2">Rs.<?php echo $total ?></th>
     </tr>
-</tfoot>
+</tfoot> -->
 
 </table>
 
     </div>
+
+    <div class="box-footer">
+    <div class="pull-left">
+        <h4>Total</h4>
+
+
+    </div>
+    <div class="pull-right">
+        <h4><?php echo $total ?></h4>
+    </div>
+</div>
 
 <div class="box-footer">
     <div class="pull-left">

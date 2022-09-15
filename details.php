@@ -1,3 +1,33 @@
+<?php
+include("Footer/db.php");
+require("functions/functions.php");
+
+?>
+<?php
+if(isset($_GET['$pro_id'])){
+    $pro_id=$_GET['pro_id'];
+    $get_product="select * from products where product_id='$pro_id'";
+    $run_product=mysqli_query($con , $get_product);
+    $row_product = mysqli_fetch_array($run_product);
+    $p_cat_id = $row_product['p_cat_id'];
+    $p_title = $row_product['product_tltle'];
+    $p_price = $row_product['product_price'];
+    $p_desc = $row_product['product_desc'];
+    $p_img1 = $row_product['product_img1'];
+    $p_img2 = $row_product['product_img2'];
+    $p_img3 = $row_product['product_img3'];
+    $get_p_cat = "select * from product_categories where p_cat_id='$p_cat_id'";
+    $run_p_cat = mysqli_query($con , $get_p_cat);
+    $row_p_cat = mysqli_fetch_array($run_p_cat);
+    $p_cat_id = $row_p_cat['p_cat_id'];
+    $p_cat_title=$row_p_cat['p_cat_title'];
+    
+
+
+}
+ ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +46,7 @@
         <div class="container"><!--container start-->
             <div class="col-md-6 offer">
                 <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
-                <a href="#">Shopping Cart Total Price: Rs 100, Total Items  <?php item(); ?></a> 
+                <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items  <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
                 <ul class="menu">
@@ -117,6 +147,9 @@
                 <ul class="breadcrumb">
                     <li><a href="home.php">Home</a></li>
                     <li>Shop</li>
+                    <li><a href="shop.php?p_cat = <?php echo $p_cat_id; ?>"><?php echo $p_cat_title ?></a>
+                   </li>
+                    <li><?php echo $p_title  ?></li>
                 </ul>
             </div><!--col-md-12 start-->
             <div class="col-md-3"><!--col-md-3 start-->
@@ -135,24 +168,24 @@
                         <div class="item active">
                             <center>
 
-<img src="images/cauliflower.jpg" class="img-responsive">
+<img src="images/<?php echo $p_img1  ?>" class="img-responsive">
                             </center>
                         
 
                     </div>
 
                 </div>
-
+ 
             </div>
 
         </div><!--col-sm-6 end-->
         <div class="col-sm-6">
             <div class="box">
-                <h1 class="text-center"><?php echo $p_title?></h1>
+                <h1 class="text-center"><?php echo $p_title ?></h1>
                 <?php
                 addCart();
                 ?>
-                <form action="details.php?add_cart=<?php echo $pro_id ?>" method="post" class="form-horizonatal">
+                <form action="index.php?add_cart=<?php echo $pro_id ?>" method="post" class="form-horizonatal">
                     <div class="form-group"><!--form-group start-->
                         <label class="col-md-5 control-label">Product Quantity</label>
                         <div class="col-md-7"><!--col-md-7 end-->
@@ -177,7 +210,7 @@
                         </div><!--col-md-7 end-->
                     </div>
 
-                    <p class="Price">Rs.80 (per kg)</p>
+                    <p class="Price">Rs. <php echo $p_price; ?> (per kg)</p>
                     <p class="text-center buttons">
                         <button class="btn btn-primary" type="submit">
                             <i class="fa fa-shopping-cart"></i>Add to cart
@@ -185,8 +218,7 @@
                     </p>
                     <div class="box" id="details">
         <h4>Product Details</h4>
-        <p>Cauliflower is one of several vegetables in the species Brassica oleracea in the genus Brassica, which is in the Brassicaceae family.
-             It is an annual plant that reproduces by seed. Typically, only the head is eaten - the edible white flesh sometimes called "curd"</p>
+        <p><?php echo $p_desc; ?></p>
     </div>
 </div>
 

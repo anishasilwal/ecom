@@ -1,3 +1,7 @@
+<?php
+include("Footer/db.php");
+require ("functions/functions.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +24,7 @@
             <!--container start-->
             <div class="col-md-6 offer">
                 <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
-                <a href="#">Shopping Cart Total Price: Rs 100, Total Items 2</a>
+                <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items <?php item();?></a>
             </div>
             <div class="col-md-6 offer">
                 <ul class="menu">
@@ -91,7 +95,7 @@
 
                 <a href="cart.php" class="btn btn-primary navbar-btn right">
                     <i class="fa-solid fa-cart-shopping"></i>
-                    <span> 4 Items In cart</span>
+                    <span> <?php item();?> Items In cart</span>
                 </a>
 
                 <div class="navbar-collapse collapse right">

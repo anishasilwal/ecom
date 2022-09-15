@@ -1,6 +1,7 @@
 <?php
 session_start();
 $connect= mysqli_connect("localhost","root","","ecom");
+require ("functions/functions.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +21,7 @@ $connect= mysqli_connect("localhost","root","","ecom");
         <div class="container"><!--container start-->
             <div class="col-md-6 offer">
                 <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
-                <a href="#">Shopping Cart Total Price: Rs 100, Total Items  <?php item(); ?></a> 
+                <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
                 <ul class="menu">

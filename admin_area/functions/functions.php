@@ -1,6 +1,6 @@
 
 <?php
-$db=mysqli_connect("localhost","root","ecom");
+$db=mysqli_connect("localhost","root","","ecom");
 
 function getPro(){
     global $db;
@@ -9,7 +9,7 @@ function getPro(){
     while($row_product=mysqli_fetch_array($run_products)){
 
         $pro_id=$row_product['product_id'];
-        $pro_title=$row_product['product_title'];
+        $pro_title=$row_product['product_tltle'];
         $pro_price=$row_product['product_price'];
         $pro_img1=$row_product['product_img1'];
 
