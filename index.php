@@ -235,5 +235,9 @@ include("Footer/footer.php");
 
     <script src="https://kit.fontawesome.com/828e3616f1.js" crossorigin="anonymous"></script>
 </body>
+<<<<<<< HEAD
 
 </html>
+=======
+</html>
+>>>>>>> 4719c799640409b4ec3856105dad87b53079972a
