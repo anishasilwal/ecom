@@ -23,7 +23,16 @@ require ("functions/functions.php");
         <div class="container">
             <!--container start-->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
+                <a href="#" class="btn btn-success btn-sm">
+                <?php
+                    if(!isset($_SESSION['customer_email'])){
+                        echo "Welcome Guest";
+                    }
+                    else{
+                        echo "Welcome: " .$_SESSION['customer_email']."";
+                    }
+                ?>
+                </a>
                 <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items <?php item();?></a>
             </div>
             <div class="col-md-6 offer">

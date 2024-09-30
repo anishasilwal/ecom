@@ -1,3 +1,7 @@
+<?php
+include("footer/db.php");
+include_once("functions/functions.php");
+?>
 <html>
     <head>
     
@@ -28,11 +32,15 @@
             <div class="col-md-3 col-sm-6"><!--col-md-3 col-sm-6 Start-->
             <h4>Top Product Categories </h4>
             <ul>
-                <li><a href="#">Tomato</a></li>
-                <li><a href="#">Cauliflower</a></li>
-                <li><a href="#">Cucumber</a></li>
-                <li><a href="#">Potato</a></li>
-                <li><a href="#">Onion</a></li>
+                <?php
+                $get_p_cats = "select * from product_categories";
+                $run_p_cats = mysqli_query($con ,$get_p_cats);
+                while($row_p_cat = mysqli_fetch_array($run_p_cats)){
+                    $p_cat_id = $row_p_cat['p_cat_id'];
+                    $p_cat_title = $row_p_cat['p_cat_title'];
+                    echo "<li><a href='shop.php?p_cat=$p_cat_id'> $p_cat_title</a></li>";
+                }
+                ?>
             </ul>
 
             <hr class="hidder-md hidden-lg ">
@@ -105,4 +113,3 @@
 </div><!--Copyright section End-->
 </body>
 </html>
-

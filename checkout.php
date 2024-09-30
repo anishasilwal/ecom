@@ -1,33 +1,8 @@
 <?php
+session_start();
 include("Footer/db.php");
 require("functions/functions.php");
-
 ?>
-<?php
-if(isset($_GET['$pro_id'])){
-    $pro_id=$_GET['pro_id'];
-    $get_product="select * from products where product_id='$pro_id'";
-    $run_product=mysqli_query($con , $get_product);
-    $row_product = mysqli_fetch_array($run_product);
-    $p_cat_id = $row_product['p_cat_id'];
-    $p_title = $row_product['product_tltle'];
-    $p_price = $row_product['product_price'];
-    $p_desc = $row_product['product_desc'];
-    $p_img1 = $row_product['product_img1'];
-    $p_img2 = $row_product['product_img2'];
-    $p_img3 = $row_product['product_img3'];
-    $get_p_cat = "select * from product_categories where p_cat_id='$p_cat_id'";
-    $run_p_cat = mysqli_query($con , $get_p_cat);
-    $row_p_cat = mysqli_fetch_array($run_p_cat);
-    $p_cat_id = $row_p_cat['p_cat_id'];
-    $p_cat_title=$row_p_cat['p_cat_title'];
-    
-
-
-}
- ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,13 +30,13 @@ if(isset($_GET['$pro_id'])){
                     }
                 ?>
                 </a>
-                <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items  <?php item(); ?></a> 
+                <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
                 <ul class="menu">
                     <li><a href="customer_registration.php">Register</a></li>
 
-                    <li><a href="checkout.php">My Account</a></li>
+                    <li><a href="customer/my_account.php">My Account</a></li>
                     <li><a href="cart.php">Go To Cart</a></li>
                     <li><a href="login.php">Login</a></li>
 
@@ -94,14 +69,14 @@ if(isset($_GET['$pro_id'])){
             <div class="navbar-collapse collapse" id="navigation"><!-- navbar-collapse collapse start--> 
                 <div class="padding-nav"><!-- padding-nav started-->
                     <ul class="nav navbar-nav navbar-left">
-                        <li >
+                        <li  class="active" >
                         <a href="index.php" >Home</a>  
                         </li>
-                        <li class="active">
+                        <li >
                         <a href="shop.php" >Shop</a>  
                         </li>
                         <li>
-                        <a href="checkout.php" >My Account</a>  
+                        <a href="customer/my_account.php" >My Account</a>  
                         </li>
                         <li>
                         <a href="cart.php" >Shopping cart</a>  
@@ -119,7 +94,7 @@ if(isset($_GET['$pro_id'])){
 
                 <a href="cart.php" class="btn btn-primary navbar-btn right">
                 <i class="fa-solid fa-cart-shopping"></i>
-                    <span>  <?php item(); ?> Items In cart</span>
+                    <span> <?php item(); ?> Items In cart</span>
                 </a>
 
                 <div class="navbar-collapse collapse right"><!--navbar-collapse collapse-right start--> 
@@ -155,112 +130,33 @@ if(isset($_GET['$pro_id'])){
             <div class="col-md-12"><!--col-md-12 start-->
                 <ul class="breadcrumb">
                     <li><a href="home.php">Home</a></li>
-                    <li>Shop</li>
-                    <li><a href="shop.php?p_cat = <?php echo $p_cat_id; ?>"><?php echo $p_cat_title ?></a>
-                   </li>
-                    <li><?php echo $p_title  ?></li>
+                    <li>CheckOut</li>
                 </ul>
             </div><!--col-md-12 start-->
             <div class="col-md-3"><!--col-md-3 start-->
                 <?php
                 include("Footer/sidebar.php");
                 ?>
-            </div><!--col-md-3 end--> 
-
-
-<div class="col-md-9">
-    <div class="row" id="productmain">
-        <div class="col-sm-6"><!--col-sm-6 start-->
-            <div id="mainimage">
-
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <center>
-
-<img src="images/<?php echo $p_img1  ?>" class="img-responsive">
-                            </center>
-                        
-
-                    </div>
-
-                </div>
- 
             </div>
 
-        </div><!--col-sm-6 end-->
-        <div class="col-sm-6">
-            <div class="box">
-                <h1 class="text-center"><?php echo $p_title ?></h1>
-                <?php
-                addCart();
-                ?>
-                <form action="index.php?add_cart=<?php echo $pro_id ?>" method="post" class="form-horizonatal">
-                    <div class="form-group"><!--form-group start-->
-                        <label class="col-md-5 control-label">Product Quantity</label>
-                        <div class="col-md-7"><!--col-md-7 end-->
-                            <select name="product_qty" class="form-control">
-                                <option>1 Kg</option>
-                                <option>2 Kg</option>
-                                <option>3 Kg</option>
-                                <option>4 Kg</option>
-                                <option>5 Kg</option>
-                            </select>
-                        </div><!--col-md-7 end-->
-                    </div><!--form-group end-->
-                    <div class="form-group"> 
-                        <label class="col-md-5 control-label">Production Farm</label>
-                        <div class="col-md-7"><!--col-md-7 end-->
-                            <select name="production_farm" class="form-control">
-                                <option>ABC</option>
-                                <option>XYZ</option>
-                                <option>123</option>
-                                <option>abc</option>
-                            </select>
-                        </div><!--col-md-7 end-->
-                    </div>
+            <div class="col-md-9">
+            <?php
+            if(!isset($_SESSION['customer_email'])){
+                include('customer_login.php');
 
-                    <p class="Price">Rs. <php echo $p_price; ?> (per kg)</p>
-                    <p class="text-center buttons">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fa fa-shopping-cart"></i>Add to cart
-                        </button>
-                    </p>
-                    <div class="box" id="details">
-        <h4>Product Details</h4>
-        <p><?php echo $p_desc; ?></p>
-    </div>
-</div>
-
-                    
-  </div>
-</div>
-</form>
-            </div>
-            
-
-        </div>
-
-    </div>
-    
-
-
-<
-
-       
-
+            }
+            else{
+                include('payment_option.php');
+            }
+            ?>
 
 
 
             </div><!--Container end-->
     </div><!--Content end-->
 
-     <!--footer start-->
+ <!--footer start-->
 <?php  
 include("Footer/footer.php");
 ?>
 <!--footer end--> 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/828e3616f1.js" crossorigin="anonymous"></script>
-</body>
-</html>

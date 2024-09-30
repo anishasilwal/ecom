@@ -19,7 +19,16 @@ require ("functions/functions.php");
     <div id="top" ><!-- Top bar start-->
         <div class="container"><!--container start-->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
+                <a href="#" class="btn btn-success btn-sm">
+                <?php
+                    if(!isset($_SESSION['customer_email'])){
+                        echo "Welcome Guest";
+                    }
+                    else{
+                        echo "Welcome: " .$_SESSION['customer_email']."";
+                    }
+                ?>
+                </a>
                 <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items  <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
@@ -135,7 +144,7 @@ require ("functions/functions.php");
     $run_cart=mysqli_query($con,$select_cart);
     $count=mysqli_num_rows($run_cart);
     ?>
-    <p class="text-muted">Currently you have 2 items in your cart.</p>
+    <p class="text-muted">Currently you have <?php echo $count; ?> items in your cart.</p>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -203,7 +212,7 @@ $total=0;
 
     </div>
     <div class="pull-right">
-        <h4><?php echo $total ?></h4>
+        <h4>Rs.<?php echo $total ?></h4>
     </div>
 </div>
 
@@ -218,7 +227,7 @@ $total=0;
        <button class="btn btn-defult" type="submit" name="update" value="Update Cart">
         <i class="fa fa-refresh">Update Cart</i>
        </button>
-       <a href="customer/my_account.php" class="btn btn-primary">
+       <a href="checkout.php" class="btn btn-primary">
         Proceed to checkout<i class="fa fa-chevron-right"></i>
       </a>
     </div>
@@ -228,6 +237,23 @@ $total=0;
 </form>
 </div>
 </div>
+
+<?php
+function update_cart(){
+    global $con;
+    if(isset($_POST['update'])){
+        foreach($_POST['remove'] as $remove_id){
+            $delete_product="delete from cart where p_id='$remove_id'";
+            $run_del=mysqli_query($con,$delete_product);
+            if($run_del){
+                echo "<script>window.open('cart.php','_self')</script>";
+
+            }
+        }
+    }
+}
+echo @$up_cart=update_cart();
+?>
 
 
 <div class="col-md-3">
@@ -245,15 +271,15 @@ $total=0;
         <tbody>
             <tr>
                 <td>Order Subtotal</td>
-                <th>Rs.210</th>
+                <th>Rs.<?php echo $total ?></th>
             </tr>
             <tr>
                 <td>Delivery Charge</td>
-                <td>Rs.50</td>
+                <td>Rs.0</td>
             </tr>
             <tr class="total">
                 <td>Total</td>
-                <td>Rs.260</td>
+                <td>Rs.<?php echo $total ?></td>
             </tr>
 
         </tbody>

@@ -19,7 +19,16 @@ require ("functions/functions.php");
     <div id="top" ><!-- Top bar start-->
         <div class="container"><!--container start-->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
+                <a href="#" class="btn btn-success btn-sm">
+                <?php
+                    if(!isset($_SESSION['customer_email'])){
+                        echo "Welcome Guest";
+                    }
+                    else{
+                        echo "Welcome: " .$_SESSION['customer_email']."";
+                    }
+                ?>
+                </a>
                 <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items  <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
@@ -190,3 +199,20 @@ include("Footer/footer.php");
     <script src="https://kit.fontawesome.com/828e3616f1.js" crossorigin="anonymous"></script>
 </body>
 </html>
+<?php
+//Admin mail
+if(isset($_POST['submit'])){
+$senderName=$_POST['name'];
+$senderEmail=$_POST['email'];
+$senderSubject=$_POST['subject'];
+$senderMessage=$_POST['message'];
+$receiverEmail="anishasilwal66@gmail.com";
+mail($receiverEmail,$senderName,$senderSubject,$senderMessage); 
+//Customer mail
+$email=$_POST['email'];
+$subject="Welcome to our website";
+$msg="I shall get you soon, thanks for sending email";
+$from="nishapokharel@gmail.com";
+echo "<h2 align='center'>your mail sent </h2>";
+}
+?>

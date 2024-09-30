@@ -1,4 +1,6 @@
 <?php
+session_start();
+include("Footer/db.php");
 require("functions/functions.php");
 ?>
 <!DOCTYPE html>
@@ -18,7 +20,16 @@ require("functions/functions.php");
     <div id="top" ><!-- Top bar start-->
         <div class="container"><!--container start-->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">Welcome Guest</a>
+                <a href="#" class="btn btn-success btn-sm">
+                <?php
+                    if(!isset($_SESSION['customer_email'])){
+                        echo "Welcome Guest";
+                    }
+                    else{
+                        echo "Welcome: " .$_SESSION['customer_email']."";
+                    }
+                ?>
+                </a>
                 <a href="#">Shopping Cart Total Price: Rs <?php totalPrice(); ?>, Total Items <?php item(); ?></a> 
             </div>
             <div class="col-md-6 offer">
@@ -212,3 +223,39 @@ include("Footer/footer.php");
     <script src="https://kit.fontawesome.com/828e3616f1.js" crossorigin="anonymous"></script>
 </body>
 </html>
+<?php
+if(isset($_POST['submit'])){
+    $c_name=$_POST['c_name'];
+    $c_email=$_POST['c_email'];
+    $c_password=$_POST['c_password'];
+    $c_country=$_POST['c_country'];
+    $c_city=$_POST['c_city'];
+    $c_contact=$_POST['c_contact'];
+    $c_address=$_POST['c_address'];
+    $c_image=$_FILES['c_image']['name'];
+    $c_tmp_image=$_FILES['c_image']['tmp_name'];
+    $c_ip=getUserIP();
+
+    move_uploaded_file($c_tmp_image,"customer/customer_images/$c_image");
+    $insert_customer="INSERT INTO customers(customer_name,customer_email,customer_pass,customer_country,customer_city,customer_contact,customer_address,customer_image,customer_ip) values('$c_name','$c_email','$c_password','$c_country','$c_city','$c_contact','$c_address','$c_image','$c_ip')";
+
+    $run_customer=mysqli_query($con,$insert_customer);
+
+    $sel_cart="select * from cart where ip_add='$c_ip' ";
+
+    $run_cart=mysqli_query($con,$sel_cart);
+
+    $check_cart=mysqli_num_rows($run_cart);
+
+    if($check_cart>0){
+        $_SESSION['customer_email']=$c_email;
+        echo "<script>alert('You have been registered successfully')</script>";
+        echo "<script>window.open('checkout.php','_self')</script>";
+
+    }else
+    {
+        $_SESSION['customer_email']=$c_email;
+        echo "<script>window.open('checkout.php','_self')</script>";
+}
+}
+?>
